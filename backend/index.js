@@ -12,7 +12,9 @@ const cors = require('cors');
 
 // ✅ Only your frontend domains should be allowed
 const allowedOrigins = [
-  'http://localhost:3000',      // Local frontend
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',      // Local frontend
   'https://yourfrontend.com'    // Live frontend URL
 ];
 

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import Login from "./Pages/Login.tsx";
-import Signup from "./pages/Signup.tsx";
+import Signup from "./Pages/Signup.tsx";
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
