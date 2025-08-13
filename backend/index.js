@@ -1,51 +1,47 @@
-const mongoose = require('mongoose');
+const express = require('express');
+require('dotenv').config();
+const connectDB = require('./db');
+const authRoutes = require('./routes/auth');
+const helmet = require('helmet'); // ✅ Add this
 
-// 1️⃣ Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/testDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('✅ MongoDB Connected'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+const app = express();
 
-// 2️⃣ Define a Schema
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  age: Number,
-  email: { type: String, unique: true }
+// ✅ Use helmet before routes
+app.use(helmet());
+const cors = require('cors');
+
+// ✅ Only your frontend domains should be allowed
+const allowedOrigins = [
+  'http://localhost:3000',      // Local frontend
+  'https://yourfrontend.com'    // Live frontend URL
+];
+
+// ✅ Apply CORS settings
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (!allowedOrigins.includes(origin)) {
+      return callback(new Error('Not allowed by CORS'), false);
+    }
+    return callback(null, true);
+  }
+}));
+
+const rateLimit = require('express-rate-limit');
+
+// ✅ Limit all API requests
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 mins
+  max: 100, // limit per IP
+  message: 'Too many requests from this IP, please try again later.'
 });
 
-// 3️⃣ Create a Model
-const User = mongoose.model('User', userSchema);
+app.use(limiter);
 
-// 4️⃣ Test: Insert a document
-async function testInsert() {
-  try {
-    const newUser = new User({
-      name: 'John Doe',
-      age: 25,
-      email: 'johndoe@example.com'
-    });
 
-    const savedUser = await newUser.save();
-    console.log('📌 User saved:', savedUser);
-  } catch (err) {
-    console.error('❌ Error saving user:', err.message);
-  }
-}
+connectDB();
+app.use(express.json());
+app.use('/api/auth', authRoutes);
 
-// 5️⃣ Test: Find all users
-async function testFind() {
-  try {
-    const users = await User.find();
-    console.log('📌 All users:', users);
-  } catch (err) {
-    console.error('❌ Error finding users:', err.message);
-  }
-}
-
-// Run tests after connection
-mongoose.connection.once('open', async () => {
-  await testInsert();
-  await testFind();
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
