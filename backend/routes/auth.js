@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // User model
 const authMiddleware = require('../authMiddleware');
- // ✅ import middleware
+ // import middleware
 
 // ========================
 // @route   POST /api/auth/signup
