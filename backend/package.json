@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "cd ../my-auth-app && npm install && npm run build",
-  "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +23,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.18.0",
     "mongoose": "^8.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
