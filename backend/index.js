@@ -49,7 +49,7 @@ app.use('/api/auth', authRoutes);
 app.use(express.static(path.join(__dirname, '../my-auth-app/dist')));
 
 // ✅ Catch-all: let React handle routing
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../my-auth-app/dist/index.html'));
 });
 
