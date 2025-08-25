@@ -12,23 +12,8 @@ const app = express();
 // ✅ Security headers
 app.use(helmet());
 
-// ✅ CORS setup (only allow your frontend)
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',     // Local dev
-  'https://yourfrontend.com'   // Replace with actual Render/Netlify frontend URL
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow same-origin / Postman
-    if (!allowedOrigins.includes(origin)) {
-      return callback(new Error('Not allowed by CORS'), false);
-    }
-    return callback(null, true);
-  }
-}));
+// ✅ CORS setup (allow all origins)
+app.use(cors());
 
 // ✅ Rate limiting
 const limiter = rateLimit({
